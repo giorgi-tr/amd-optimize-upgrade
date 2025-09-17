@@ -23,7 +23,7 @@
     "async": "^3.2.6",
     "escodegen": "^2.1.0",
     "lodash": "^4.17.21",
-    "through2": "0.4.1",
+    "through2": "3.0.2",
     "vinyl": "^3.0.1",
     "vinyl-fs": "^4.0.2",
     "vinyl-sourcemaps-apply": "0.1.4"
