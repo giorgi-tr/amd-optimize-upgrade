@@ -1,8 +1,6 @@
 _         = require("lodash")
-fs        = require("fs")
 path      = require("path")
 async     = require("async")
-VinylFile = require("vinyl")
 
 parse     = require("./parse")
 util      = require("./util")

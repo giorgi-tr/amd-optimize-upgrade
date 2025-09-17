@@ -1,15 +1,11 @@
 _            = require("lodash")
-fs           = require("fs")
 path         = require("path")
 vinylFs      = require("vinyl-fs")
 async        = require("async")
 through      = require("through2")
 
-Readable     = require("stream").Readable
-
 trace        = require("./trace")
 exportModule = require("./export")
-util         = require("./util")
 
 firstChunk = (stream, callback) ->
 
@@ -169,12 +165,14 @@ module.exports = rjs = (entryModuleName, options = {}) ->
                 if err
                   callback(err)
                 else
-                  callback(null, modules, _(excludedModules)
+                  excludedNames = _(excludedModules)
                     .map((module) -> collectModules(module))
                     .flatten()
-                    .pluck("name")
-                    .unique()
-                    .value())
+                    .map("name")
+                    .uniq()
+                    .value()
+
+                  callback(null, modules, excludedNames)
             )
           else
             callback(null, modules, [])
