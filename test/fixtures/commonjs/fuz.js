@@ -1,4 +1,4 @@
 define(function(require) {
-  var bar = require('./bar');
+  const bar = require('./bar');
   return bar.baz();
 });

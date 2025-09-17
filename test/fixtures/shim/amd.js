@@ -1,2 +1,2 @@
-var test = "TEST";
+const test = "TEST";
 define(test);

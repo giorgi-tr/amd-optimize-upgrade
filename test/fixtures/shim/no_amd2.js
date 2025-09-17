@@ -1,1 +1,1 @@
-var test2 = "TEST2";
+const test2 = "TEST2";

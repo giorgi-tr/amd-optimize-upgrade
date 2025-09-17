@@ -1,16 +1,16 @@
 require("coffee-script").register();
 
-var gulp     = require("gulp");
-var coffee   = require("gulp-coffee");
-var gif      = require("gulp-if");
-var mocha = require("gulp-mocha").default;
-var concat   = require("gulp-concat");
-var util     = require("gulp-util");
-var uglify   = require("gulp-uglify");
-var rjs      = require("./src/index.coffee");
+const gulp = require("gulp");
+const coffee = require("gulp-coffee");
+const gif = require("gulp-if");
+const mocha = require("gulp-mocha").default;
+const concat = require("gulp-concat");
+const util = require("gulp-util");
+const uglify = require("gulp-uglify");
+const rjs = require("./src/index.coffee");
 
-var path     = require("path");
-var through  = require("through2");
+const path = require("path");
+const through = require("through2");
 
 
 gulp.task("compile", function (){
@@ -63,18 +63,24 @@ gulp.task("example", function () {
 
 gulp.task("example2", function () {
   // Traces all modules and outputs them in the correct order. Also wraps shimmed modules.
-  var source = rjs("main", {
-      configFile : gulp.src("public/javascripts/require_config.coffee").pipe(coffee()),
-      wrapShim : true,
-      baseUrl : "public/javascripts",
-      paths : {
-        routes : "empty:"
+  const source = rjs("main", {
+    configFile: gulp.src("public/javascripts/require_config.coffee").pipe(coffee()),
+    wrapShim: true,
+    baseUrl: "public/javascripts",
+    paths: {
+      routes: "empty:"
+    },
+    loader: rjs.loader(
+      function (moduleName) {
+        return path.join("public/javascripts", moduleName + ".{js,coffee}")
       },
-      loader : rjs.loader(
-        function (moduleName) { return path.join("public/javascripts", moduleName + ".{js,coffee}") },
-        function () { return gif(function (file) { return path.extname(file.path) == ".coffee"; }, coffee()) }
-      )
-    });
+      function () {
+        return gif(function (file) {
+          return path.extname(file.path) == ".coffee";
+        }, coffee())
+      }
+    )
+  });
 
   source.end();
   return source
