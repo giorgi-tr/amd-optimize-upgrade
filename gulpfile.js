@@ -3,7 +3,7 @@ require("coffee-script").register();
 var gulp     = require("gulp");
 var coffee   = require("gulp-coffee");
 var gif      = require("gulp-if");
-var mocha    = require("gulp-mocha");
+var mocha = require("gulp-mocha").default;
 var concat   = require("gulp-concat");
 var util     = require("gulp-util");
 var uglify   = require("gulp-uglify");
@@ -20,10 +20,13 @@ gulp.task("compile", function (){
 });
 
 
-gulp.task("test", ["compile"], function () {
-  return gulp.src("test/*_test.coffee")
-    .pipe(mocha({ reporter : "spec" }));
-});
+gulp.task("test", gulp.series("compile", function () {
+  return gulp.src("test/*_test.coffee", { read: false })
+    .pipe(mocha({
+      reporter: "spec",
+      require: ["coffee-script/register"]
+    }));
+}));
 
 
 function logger() {
@@ -81,6 +84,6 @@ gulp.task("example2", function () {
     .pipe(logger());
 });
 
-gulp.task("default", ["compile", "test"]);
+gulp.task("default", gulp.series("compile", "test"));
 
 

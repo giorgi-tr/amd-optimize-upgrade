@@ -43,7 +43,7 @@ collectModules = (module, omitInline = true) ->
     currentModule.deps.forEach( (depModule) ->
       collector(depModule)
     )
-    if not (omitInline and currentModule.isInline) and not _.any(outputBuffer, name : currentModule.name)
+    if not (omitInline and currentModule.isInline) and not _.some(outputBuffer, name : currentModule.name)
       outputBuffer.push(currentModule)
 
   collector(module)
@@ -73,9 +73,9 @@ defaultLoader = (fileBuffer, options) ->
 
     addJs = (!asPlainFile) and '.js' or ''
 
-    if options.baseUrl and file = _.detect(fileBuffer, path : path.resolve(options.baseUrl, name + addJs))
+    if options.baseUrl and file = _.find(fileBuffer, path : path.resolve(options.baseUrl, name + addJs))
       callback(null, file)
-    else if file = _.detect(fileBuffer, relative : path.join(options.baseUrl, name + addJs))
+    else if file = _.find(fileBuffer, relative : path.join(options.baseUrl, name + addJs))
       callback(null, file)
     else if options.loader
       options.loader(name, callback)
@@ -186,8 +186,8 @@ module.exports = rjs = (entryModuleName, options = {}) ->
 
           # Remove excluded modules
           modules = _.reject(modules, (module) ->
-            return _.contains(excludedModuleNames, module.name) or
-            _.contains(options.excludeShallow, module.name)
+            return _.includes(excludedModuleNames, module.name) or
+            _.includes(options.excludeShallow, module.name)
           )
 
           # Fix and export all the files in correct order
