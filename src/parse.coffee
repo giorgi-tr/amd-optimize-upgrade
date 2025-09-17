@@ -1,7 +1,8 @@
 _         = require("lodash")
 acorn     = require("acorn")
 escodegen = require("escodegen")
-walk      = require("acorn-walk")
+ancestor = require("acorn-walk").ancestor;
+simple = require("acorn-walk").simple;
 
 valuesFromArrayExpression = (expr) -> expr.elements.map( (a) -> a.value )
 
@@ -36,7 +37,7 @@ module.exports = parseRequireDefinitions = (config, file, callback) ->
   file.ast = ast
 
   definitions = []
-  walk.ancestor(ast, CallExpression : (node, state) ->
+  ancestor(ast, CallExpression : (node, state) ->
 
     if node.callee.name == "define"
 
@@ -48,7 +49,7 @@ module.exports = parseRequireDefinitions = (config, file, callback) ->
           node.arguments[0].params.length > 0
 
             deps = ['require', 'exports', 'module']
-            walk.simple(node.arguments[0], CallExpression : (node) ->
+            simple(node.arguments[0], CallExpression : (node) ->
               if node.callee.name == "require" or node.callee.name == "requirejs"
                 deps.push(node.arguments[0].value)
             )
